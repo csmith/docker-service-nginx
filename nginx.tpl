@@ -1,6 +1,6 @@
 {% for service in services %}
 server {
-    server_name {{ service.vhost }};
+    server_name {{ ' '.join(service.vhosts) }};
     listen [::]:443 ssl http2;
 
     location / {

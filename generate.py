@@ -24,7 +24,7 @@ while True:
     networks = fetcher.get_networks(container)
     services.append({
       'protocol': 'http', # TODO: Support HTTPS
-      'vhost': domains[container], # TODO: Handle SANs
+      'vhosts': domains[container].split(','),
       'host': next(iter(networks.values())), # TODO: Pick a bridge sensibly?
       'port': values      
     })
