@@ -11,6 +11,8 @@ parser.add_argument('--name', help='Name of the docker host to request certifica
 parser.add_argument('--etcd-port', type=int, help='Port to connect to etcd on', default=2379)
 parser.add_argument('--etcd-host', help='Host to connect to etcd on', default='etcd')
 parser.add_argument('--etcd-prefix', help='Prefix to use when retrieving keys from etcd', default='/docker')
+parser.add_argument('--cert-path', help='Path to use for certificates. Use "%s" for hostname', default='/letsencrypt/certs/%s/fullchain.pem')
+parser.add_argument('--cert-key-path', help='Path to use for certificate private keys. Use "%s" for hostname', default='/letsencrypt/certs/%s/privkey.pem')
 args = parser.parse_args()
 
 jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader('/'))
@@ -19,15 +21,17 @@ fetcher = etcdlib.Connection(args.etcd_host, args.etcd_port, args.etcd_prefix)
 
 while True:
   services = []
-  domains = fetcher.get_label('com.chameth.vhost')
+  domains = {k: v.split(',') for k, v in fetcher.get_label('com.chameth.vhost').items()}
   protocols = fetcher.get_label('com.chameth.proxy.protocol')
   for container, values in fetcher.get_label('com.chameth.proxy').items():
     networks = fetcher.get_networks(container)
     services.append({
       'protocol': protocols[container] if container in protocols else 'http',
-      'vhosts': domains[container].split(','),
+      'vhosts': domains[container],
       'host': next(iter(networks.values())), # TODO: Pick a bridge sensibly?
-      'port': values      
+      'port': values,
+      'certificate': args.cert_path % domains[container][0],
+      'certificate_key': args.cert_key_path % domains[container][0]
     })
 
   print(template.render(services=services)) # TODO: Actually write it out

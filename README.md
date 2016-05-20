@@ -38,3 +38,9 @@ Then run this container. It takes the same arguments as `service-reporter`:
   --name (default: unknown) name of the host running docker
 ```
 
+And some additional arguments:
+
+```
+  --cert-path (default: /letsencrypt/certs/%s/fullchain.pem) path to the SSL cert. Use '%s' for the primary vhost.
+  --cert-key-path (default: /letsencrypt/certs/%s/privkey.pem) path to the SSL cert's private key. Use '%s' for the primary vhost.
+```
