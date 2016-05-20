@@ -12,6 +12,19 @@ known containers.
 This container monitors `etcd` for a label specifying vhosts and proxy ports,
 and puts them into a template file for nginx to use. 
 
+## Labels
+
+You must label any container that you wish to proxy. The following labels
+are understood:
+
+* `com.chameth.proxy=<port>` -- specifies the port on the container that the
+  proxy should connect to
+* `com.chameth.proxy.protocol=<protocol>` -- the protocol to use when
+  connecting to the container. Optional, defaults to HTTP.
+* `com.chameth.vhost=<host>` -- the virtual host that the proxy will accept
+  connections on. You can specify alternate hosts/aliases by separating them
+  with commas.
+
 ## Usage
 
 TODO: Finish this!

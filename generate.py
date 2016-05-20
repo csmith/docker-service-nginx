@@ -20,10 +20,11 @@ fetcher = etcdlib.Connection(args.etcd_host, args.etcd_port, args.etcd_prefix)
 while True:
   services = []
   domains = fetcher.get_label('com.chameth.vhost')
+  protocols = fetcher.get_label('com.chameth.proxy.protocol')
   for container, values in fetcher.get_label('com.chameth.proxy').items():
     networks = fetcher.get_networks(container)
     services.append({
-      'protocol': 'http', # TODO: Support HTTPS
+      'protocol': protocols[container] if container in protocols else 'http',
       'vhosts': domains[container].split(','),
       'host': next(iter(networks.values())), # TODO: Pick a bridge sensibly?
       'port': values      
