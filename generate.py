@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-from collections import defaultdict
 import argparse
 import etcdlib
 import jinja2
@@ -34,7 +33,10 @@ while True:
       'certificate_key': args.cert_key_path % domains[container][0]
     })
 
-  print(template.render(services=services)) # TODO: Actually write it out
+  with open('/nginx-config/vhosts.conf', 'w') as f:
+    print('Writing vhosts.conf...', flush=True)
+    f.write(template.render(services=services))
+
   print('Done writing config.', flush=True)
 
   fetcher.wait_for_update()
