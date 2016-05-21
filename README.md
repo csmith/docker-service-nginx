@@ -27,7 +27,13 @@ are understood:
 
 ## Usage
 
-TODO: Finish this!
+Create a named volume for your nginx config, if you don't already have one:
+
+```
+docker volume create --name nginx-config
+```
+
+This should be mounted at `/nginx-config`.
 
 Then run this container. It takes the same arguments as `service-reporter`:
 
@@ -41,6 +47,20 @@ Then run this container. It takes the same arguments as `service-reporter`:
 And some additional arguments:
 
 ```
-  --cert-path (default: /letsencrypt/certs/%s/fullchain.pem) path to the SSL cert. Use '%s' for the primary vhost.
-  --cert-key-path (default: /letsencrypt/certs/%s/privkey.pem) path to the SSL cert's private key. Use '%s' for the primary vhost.
+  --cert-path (default: /letsencrypt/certs/%s/fullchain.pem) path to the SSL cert.
+  --cert-key-path (default: /letsencrypt/certs/%s/privkey.pem) path to the SSL cert's private key.
 ```
+
+For certificate paths, '%s' will be replaced with the (primary) vhost for each
+site.
+
+So running the container will look something like:
+
+```
+docker run -d \
+  --name service-nginx \
+  --restart always \
+  -v nginx-config:/nginx-config \
+  csmith/service-nginx:latest
+```
+
