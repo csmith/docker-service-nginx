@@ -64,3 +64,19 @@ docker run -d \
   csmith/service-nginx:latest
 ```
 
+## Config files
+
+The container will write out the config to /nginx-config/vhosts.conf (which
+should put it at the root of the nginx-config volume if you're using the
+configuration described above).
+
+Each service has an include directive that allows site-specific config files to
+be placed in a directory. For example, if a container has a vhost label of
+`example.com,www.example.com`, you can create a file at `/example.com/foo.conf`
+in the nginx-data volume and it will be included within that site's `server`
+block.
+
+It's intended that `nginx-config` is mounted under `/etc/nginx/conf.d/` when
+running nginx so global configuration files can be placed alongside the
+`vhost.conf` file.
+

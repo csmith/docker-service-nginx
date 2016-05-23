@@ -7,6 +7,8 @@ server {
     ssl_certificate {{ service.certificate }};
     ssl_certificate_key {{ service.certificate_key }};
 
+    include {{ service.vhosts[0] }}/*.conf;
+
     location / {
         proxy_pass {{ service.protocol }}://{{ service.host }}:{{ service.port }};
     }
