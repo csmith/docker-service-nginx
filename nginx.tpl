@@ -12,6 +12,8 @@ server {
 
     location / {
         proxy_pass {{ service.protocol }}://{{ service.host }}:{{ service.port }};
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $remote_addr;
     }
 }
 {% endfor %}
