@@ -48,6 +48,7 @@ And some additional arguments:
 
 ```
   --cert-path (default: /letsencrypt/certs/%s/fullchain.pem) path to the SSL cert.
+  --trusted-cert-path (default: /letsencrypt/certs/%s/chain.pem) path to the CA certs used in SSL stapling.
   --cert-key-path (default: /letsencrypt/certs/%s/privkey.pem) path to the SSL cert's private key.
 ```
 

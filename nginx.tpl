@@ -5,6 +5,7 @@ server {
     listen 443 ssl http2;
 
     ssl_certificate {{ service.certificate }};
+    ssl_trusted_certificate {{ service.trusted_certificate }};
     ssl_certificate_key {{ service.certificate_key }};
 
     include {{ service.vhosts[0] }}/*.conf;
