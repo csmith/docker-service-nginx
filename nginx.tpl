@@ -8,7 +8,7 @@ server {
     ssl_trusted_certificate {{ service.trusted_certificate }};
     ssl_certificate_key {{ service.certificate_key }};
 
-    include {{ service.vhosts[0] }}/*.conf;
+    include /etc/nginx/conf.d/{{ service.vhosts[0] }}/*.conf;
 
     location / {
         proxy_pass {{ service.protocol }}://{{ service.host }}:{{ service.port }};
