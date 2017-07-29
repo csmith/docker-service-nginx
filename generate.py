@@ -23,6 +23,7 @@ while True:
   services = []
   domains = {k: v.split(',') for k, v in fetcher.get_label('com.chameth.vhost').items()}
   protocols = fetcher.get_label('com.chameth.proxy.protocol')
+  defaults = fetcher.get_label('com.chameth.proxy.default')
   for container, values in fetcher.get_label('com.chameth.proxy').items():
     networks = fetcher.get_networks(container)
     services.append({
@@ -32,7 +33,8 @@ while True:
       'port': values,
       'certificate': args.cert_path % domains[container][0],
       'trusted_certificate': args.trusted_cert_path % domains[container][0],
-      'certificate_key': args.cert_key_path % domains[container][0]
+      'certificate_key': args.cert_key_path % domains[container][0],
+      'default': container in defaults,
     })
 
   with open('/nginx-config/vhosts.conf', 'w') as f:

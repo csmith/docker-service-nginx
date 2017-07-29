@@ -19,6 +19,8 @@ are understood:
 
 * `com.chameth.proxy=<port>` -- specifies the port on the container that the
   proxy should connect to
+* `com.chameth.proxy.default` -- identifies the container that will receive
+  traffic if no others match
 * `com.chameth.proxy.protocol=<protocol>` -- the protocol to use when
   connecting to the container. Optional, defaults to HTTP.
 * `com.chameth.vhost=<host>` -- the virtual host that the proxy will accept

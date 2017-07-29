@@ -1,8 +1,8 @@
 {% for service in services %}
 server {
     server_name {{ ' '.join(service.vhosts) }};
-    listen [::]:443 ssl http2;
-    listen 443 ssl http2;
+    listen [::]:443{{ ' default_server' if default }} ssl http2;
+    listen 443{{ ' default_server' if default }} ssl http2;
 
     ssl_certificate {{ service.certificate }};
     ssl_trusted_certificate {{ service.trusted_certificate }};

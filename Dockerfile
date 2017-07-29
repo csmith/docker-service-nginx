@@ -1,5 +1,5 @@
 FROM csmith/service-reporter-lib:latest 
-MAINTAINER Chris Smith <chris87@gmail.com> 
+MAINTAINER Chris Smith <dke@chameth.com> 
 
 RUN \
   pip install \
