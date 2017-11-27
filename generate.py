@@ -21,6 +21,7 @@ template = jinja_env.get_template('nginx.tpl')
 fetcher = etcdlib.Connection(args.etcd_host, args.etcd_port, args.etcd_prefix)
 
 while True:
+  wroteConfig = False;
   services = []
   domains = {k: v.split(',') for k, v in fetcher.get_label('com.chameth.vhost').items()}
   protocols = fetcher.get_label('com.chameth.proxy.protocol')
@@ -40,9 +41,11 @@ while True:
         'default': container in defaults,
       })
 
-  with open('/nginx-config/vhosts.conf', 'w') as f:
-    print('Writing vhosts.conf...', flush=True)
-    f.write(template.render(services=services))
+  if wroteConfig or len(services) > 0 or not os.path.isfile('/nginx-config/vhosts.conf'):
+    with open('/nginx-config/vhosts.conf', 'w') as f:
+      print('Writing vhosts.conf...', flush=True)
+      f.write(template.render(services=services))
+      wroteConfig = True;
 
   print('Done writing config.', flush=True)
 
