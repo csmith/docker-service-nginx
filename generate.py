@@ -4,6 +4,7 @@ import argparse
 import etcdlib
 import jinja2
 import os
+import os.path
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--name', help='Name of the docker host to request certificates for', default='unknown')
@@ -26,16 +27,18 @@ while True:
   defaults = fetcher.get_label('com.chameth.proxy.default')
   for container, values in fetcher.get_label('com.chameth.proxy').items():
     networks = fetcher.get_networks(container)
-    services.append({
-      'protocol': protocols[container] if container in protocols else 'http',
-      'vhosts': domains[container],
-      'host': next(iter(networks.values())), # TODO: Pick a bridge sensibly?
-      'port': values,
-      'certificate': args.cert_path % domains[container][0],
-      'trusted_certificate': args.trusted_cert_path % domains[container][0],
-      'certificate_key': args.cert_key_path % domains[container][0],
-      'default': container in defaults,
-    })
+    certfile = args.cert_path % domains[container][0];
+    if os.path.isfile(certfile):
+      services.append({
+        'protocol': protocols[container] if container in protocols else 'http',
+        'vhosts': domains[container],
+        'host': next(iter(networks.values())), # TODO: Pick a bridge sensibly?
+        'port': values,
+        'certificate': args.cert_path % domains[container][0],
+        'trusted_certificate': args.trusted_cert_path % domains[container][0],
+        'certificate_key': args.cert_key_path % domains[container][0],
+        'default': container in defaults,
+      })
 
   with open('/nginx-config/vhosts.conf', 'w') as f:
     print('Writing vhosts.conf...', flush=True)
