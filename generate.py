@@ -14,6 +14,7 @@ parser.add_argument('--etcd-prefix', help='Prefix to use when retrieving keys fr
 parser.add_argument('--trusted-cert-path', help='Path to use for trusted CA certificate. Use "%s" for hostname', default='/letsencrypt/certs/%s/chain.pem')
 parser.add_argument('--cert-path', help='Path to use for certificates. Use "%s" for hostname', default='/letsencrypt/certs/%s/fullchain.pem')
 parser.add_argument('--cert-key-path', help='Path to use for certificate private keys. Use "%s" for hostname', default='/letsencrypt/certs/%s/privkey.pem')
+parser.add_argument('--wellknown-path', help='Path to use for wellknown directory for http-01 challenge.', default='/letsencrypt/well-known/')
 args = parser.parse_args()
 
 jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader('/'))
@@ -51,7 +52,7 @@ while True:
   if wroteConfig or len(services) > 0 or not os.path.isfile('/nginx-config/vhosts.conf'):
     with open('/nginx-config/vhosts.conf', 'w') as f:
       print('Writing vhosts.conf...', flush=True)
-      f.write(template.render(services=services))
+      f.write(template.render(services=services, wellknown_path=args.wellknown_path))
       wroteConfig = True;
     print('Done writing config.', flush=True)
   else:
