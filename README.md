@@ -26,6 +26,8 @@ are understood:
 * `com.chameth.vhost=<host>` -- the virtual host that the proxy will accept
   connections on. You can specify alternate hosts/aliases by separating them
   with commas.
+* `com.chameth.proxy.loadbalance=<gruop name>` -- Load balance this container
+  with other containers that have the same group name.
 
 ## Usage
 
