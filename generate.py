@@ -46,6 +46,9 @@ while True:
       print('Writing vhosts.conf...', flush=True)
       f.write(template.render(services=services))
       wroteConfig = True;
+    print('Done writing config.', flush=True)
+  else:
+    print('Not writing empty config. Ensure that your letsencrypt certificates are accessible to this container.')
 
   print('Done writing config.', flush=True)
 
