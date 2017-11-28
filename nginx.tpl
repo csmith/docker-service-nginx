@@ -16,6 +16,19 @@ server {
 
     include /etc/nginx/conf.d/{{ service.vhosts[0] }}/*.conf;
 
+    # From https://community.letsencrypt.org/t/how-to-nginx-configuration-to-enable-acme-challenge-support-on-all-http-virtual-hosts/5622
+    location ^~ /.well-known/acme-challenge/ {
+        default_type "text/plain";
+        alias {{ wellknown_path }};
+    }
+
+    # Hide /acme-challenge subdirectory and return 404 on all requests.
+    # It is somewhat more secure than letting Nginx return 403.
+    # Ending slash is important!
+    location = /.well-known/acme-challenge/ {
+        return 404;
+    }
+
     location / {
         proxy_pass {{ service.protocol }}://{{ service.upstream }};
         proxy_set_header Host $host;
