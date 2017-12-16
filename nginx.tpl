@@ -33,6 +33,7 @@ server {
         proxy_pass {{ service.protocol }}://{{ service.upstream }};
         proxy_set_header Host $host;
         proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header X-Forwarded-Proto $scheme;
     }
 }
 {% endfor %}
