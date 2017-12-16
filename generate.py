@@ -35,6 +35,7 @@ while True:
     if os.path.isfile(certfile):
       if not up in services:
         services[up] = {
+          'upstream': up,
           'protocol': protocols[container] if container in protocols else 'http',
           'vhosts': domains[container],
           'hosts': [],
